@@ -1,8 +1,11 @@
 /* 여기에 주어진 요구 사항을 충족 시키기 위한 코드를 작성 및 수정해 주세요. */
 import "./Card.css";
 import {Post} from "../App";
-//TODO 북마크 처리
-function Card({title, views, upload_date, bookmark}: Post) {
+
+interface CardProps extends Post {
+  onClickBookmark: () => void;
+}
+function Card({title, views, upload_date, bookmark, onClickBookmark}: CardProps) {
   return (
     <li className="card--container" id="card1">
       <div className="header">
@@ -10,8 +13,8 @@ function Card({title, views, upload_date, bookmark}: Post) {
           <span className="upload-date">{upload_date}</span>
         </div>
         <div className="card--tag">
-          <span className="icon bookmark">
-            <i className="fa fa-bookmark"></i>
+          <span className="icon bookmark" onClick={onClickBookmark}>
+            <i className="fa fa-bookmark" style={{color: bookmark ? "red" : "white"}}></i>
           </span>
         </div>
       </div>

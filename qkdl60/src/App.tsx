@@ -1,7 +1,6 @@
 /* 여기에 주어진 요구 사항을 충족 시키기 위한 코드를 작성 및 수정해 주세요. */
 import "./App.css";
 import Card from "./components/Card";
-
 import {useEffect, useState} from "react";
 
 type OrderType = "latest" | "views";
@@ -13,12 +12,27 @@ type dataString = `${number}-${number}-${number}`;
 export interface Post {
   title: string;
   views: number;
-  upload_date: string;
-  bookmark: dataString;
+  upload_date: dataString;
+  bookmark: boolean;
 }
 const sortList = (orderType: OrderType, dataList: Post[]) => {
-  if (orderType === "latest") return dataList.sort((a, b) => (a.upload_date < b.upload_date ? 1 : -1));
-  if (orderType === "views") return dataList.sort((a, b) => b.views - a.views);
+  if (orderType === "latest") {
+    return dataList.sort((a, b) => {
+      if (a.bookmark !== b.bookmark) {
+        return a.bookmark ? -1 : 1;
+      }
+      const dateA = new Date(a.upload_date);
+      const dateB = new Date(b.upload_date);
+      return dateB.getTime() - dateA.getTime();
+    });
+  }
+  if (orderType === "views")
+    return dataList.sort((a, b) => {
+      if (a.bookmark !== b.bookmark) {
+        return a.bookmark ? -1 : 1;
+      }
+      return b.views - a.views;
+    });
   return dataList;
 };
 
@@ -54,7 +68,21 @@ function App() {
       </div>
       <div className="section">
         {sortedList.map((post, index) => (
-          <Card key={index} title={post.title} upload_date={post.upload_date} views={post.views} bookmark={post.bookmark} />
+          <Card
+            onClickBookmark={() => {
+              setPostList(
+                postList.map((targetPost) => {
+                  if (targetPost.title === post.title) return {...targetPost, bookmark: !targetPost.bookmark};
+                  else return targetPost;
+                })
+              );
+            }}
+            key={index}
+            title={post.title}
+            upload_date={post.upload_date}
+            views={post.views}
+            bookmark={post.bookmark}
+          />
         ))}
       </div>
     </div>
