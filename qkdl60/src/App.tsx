@@ -67,23 +67,25 @@ function App() {
         </select>
       </div>
       <div className="section">
-        {sortedList.map((post, index) => (
-          <Card
-            onClickBookmark={() => {
-              setPostList(
-                postList.map((targetPost) => {
-                  if (targetPost.title === post.title) return {...targetPost, bookmark: !targetPost.bookmark};
-                  else return targetPost;
-                })
-              );
-            }}
-            key={index}
-            title={post.title}
-            upload_date={post.upload_date}
-            views={post.views}
-            bookmark={post.bookmark}
-          />
-        ))}
+        <ol>
+          {sortedList.map((post, index) => (
+            <Card
+              onClickBookmark={() => {
+                setPostList(
+                  postList.map((targetPost) => {
+                    if (targetPost.title === post.title) return {...targetPost, bookmark: !targetPost.bookmark};
+                    else return targetPost;
+                  })
+                );
+              }}
+              key={index}
+              title={post.title}
+              upload_date={post.upload_date}
+              views={post.views}
+              bookmark={post.bookmark}
+            />
+          ))}
+        </ol>
       </div>
     </div>
   );
