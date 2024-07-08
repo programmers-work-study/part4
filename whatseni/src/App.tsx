@@ -1,8 +1,6 @@
 /* 여기에 주어진 요구 사항을 충족 시키기 위한 코드를 작성 및 수정해 주세요. */
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import Table from "./components/Table";
-import { json } from "stream/consumers";
 import Card from "./components/Card";
 
 type SortType = 'recent' | 'view';
@@ -43,8 +41,18 @@ function App() {
     } else if (bySort === 'view') {
       sortedData = list.sort((a: IData, b: IData) => b.views - a.views);
     }
+
+    sortedData = sortedData.sort((a: IData, b: IData) => (b.bookmark ? 1 : 0) - (a.bookmark ? 1 : 0));
     setData(sortedData)
   }
+
+  const toggleBookmark = (title: string) => {
+    const updatedData = data?.map(item =>
+      item.title === title ? { ...item, bookmark: !item.bookmark } : item
+    ) || [];
+    setData(updatedData);
+    sortData(updatedData);
+  };
 
   useEffect(() => {
     fetchData().then(res => {
@@ -64,7 +72,7 @@ function App() {
       </div>
       <div className="section">
         {
-          data ? data.map((d) => <Card post={d} />) : null
+          data ? data.map((d) => <Card key={d.title} post={d} onBookmarkToggle={toggleBookmark} />) : null
         }
       </div>
     </div>
