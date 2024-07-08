@@ -6,7 +6,7 @@ function Card({ post }) {
     <li className="card--container" id="card1">
       <div className="header">
         <div className="card--tag">
-          <span className="upload-date">{post.upload_data}</span>
+          <span className="upload-date">{post.upload_date}</span>
         </div>
         <div className="card--tag">
           <span className="icon bookmark">
