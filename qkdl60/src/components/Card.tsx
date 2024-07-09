@@ -13,8 +13,8 @@ function Card({title, views, upload_date, bookmark, onClickBookmark}: CardProps)
           <span className="upload-date">{upload_date}</span>
         </div>
         <div className="card--tag">
-          <span className="icon bookmark" onClick={onClickBookmark}>
-            <i className="fa fa-bookmark" style={{color: bookmark ? "red" : "white"}}></i>
+          <span className={`icon bookmark ${bookmark ? "marked" : ""}`} onClick={onClickBookmark}>
+            <i className="fa fa-bookmark"></i>
           </span>
         </div>
       </div>
