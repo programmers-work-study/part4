@@ -79,10 +79,7 @@ function App() {
                 );
               }}
               key={index}
-              title={post.title}
-              upload_date={post.upload_date}
-              views={post.views}
-              bookmark={post.bookmark}
+              {...post}
             />
           ))}
         </ol>
