@@ -1,32 +1,39 @@
 /* 여기에 주어진 요구 사항을 충족 시키기 위한 코드를 작성 및 수정해 주세요. */
+import { IData } from "../App";
 import "./Card.css";
 
-function Card({ post, onBookmarkToggle }) {
-  const handleBookMarkClick = () => {
-    onBookmarkToggle(post.title)
+function Card({ posts, onBookmarkToggle }) {
+  const handleBookmarkClick = (title) => {
+    onBookmarkToggle(title)
   }
   return (
-    <li className="card--container" id="card1">
-      <div className="header">
-        <div className="card--tag">
-          <span className="upload-date">{post.upload_date}</span>
-        </div>
-        <div className="card--tag" onClick={handleBookMarkClick}>
-          <span className={`icon bookmark ${post.bookmark ? "selected" : ""}`}>
-            <i className="fa fa-bookmark"></i>
-          </span>
-        </div>
-      </div>
-      <div className="card--content">
-        <span className="title">{post.title}</span>
-      </div>
-      <div className="footer">
-        <div className="card--tag">
-          <span className="views">{post.views}</span>
-          views
-        </div>
-      </div>
-    </li>
+    <div className="card--box">
+      {
+        posts.map((post: IData) => (
+          <li className="card--container" id="card1" key={post.title}>
+            <div className="header">
+              <div className="card--tag">
+                <span className="upload-date">{post.upload_date}</span>
+              </div>
+              <div className="card--tag" onClick={() => handleBookmarkClick(post.title)}>
+                <span className={`icon bookmark ${post.bookmark ? "selected" : ""}`}>
+                  <i className="fa fa-bookmark"></i>
+                </span>
+              </div>
+            </div>
+            <div className="card--content">
+              <span className="title">{post.title}</span>
+            </div>
+            <div className="footer">
+              <div className="card--tag">
+                <span className="views">{post.views}</span>
+                views
+              </div>
+            </div>
+          </li>
+        ))
+      }
+    </div>
   );
 }
 export default Card;

@@ -2,9 +2,10 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 import Card from "./components/Card";
+import jsonData from "./data/posts.json"
 
 type SortType = 'recent' | 'view';
-interface IData {
+export interface IData {
   title: string;
   views: number;
   upload_date: string;
@@ -25,9 +26,10 @@ function App() {
 
   const fetchData = async () => {
     try {
-      const response = await fetch("./data/posts.json");
-      const jsonData = await response.json();
       return jsonData;
+      // const response = await fetch("./data/posts.json");
+      // const jsonData = await response.json();
+      // return jsonData;
     } catch (error) {
       console.log(error)
     }
@@ -82,9 +84,7 @@ function App() {
         </select>
       </div>
       <div className="section">
-        {
-          data ? data.map((d) => <Card key={d.title} post={d} onBookmarkToggle={toggleBookmark} />) : null
-        }
+        {data ? <Card posts={data} onBookmarkToggle={toggleBookmark} /> : null}
       </div>
     </div>
   );
