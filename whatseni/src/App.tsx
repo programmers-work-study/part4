@@ -13,6 +13,7 @@ interface IData {
 function App() {
   const [data, setData] = useState<IData[] | null>(null);
   const [bySort, setBySort] = useState<SortType>('recent');
+  const [isMount, setIsMount] = useState<boolean>(false); // 데이터 한번만 가져오도록 설정하기 위한 플래그
 
   const handleChangeType = (event: React.ChangeEvent<HTMLSelectElement>) => {
     if (event.target.value === '1') {
@@ -35,7 +36,7 @@ function App() {
   const sortData = (list: IData[] | null) => {
     if (!list) return;
 
-    let sortedData;
+    let sortedData: IData[];
     if (bySort === 'recent') {
       sortedData = list.sort((a: IData, b: IData) => new Date(b.upload_date).getTime() - new Date(a.upload_date).getTime());
     } else if (bySort === 'view') {
@@ -55,11 +56,21 @@ function App() {
   };
 
   useEffect(() => {
-    fetchData().then(res => {
-      if (res) {
-        sortData(res);
-      }
-    })
+    setIsMount(true);
+
+    return () => setIsMount(false);
+  }, [])
+
+  useEffect(() => {
+    if (!isMount) {
+      fetchData().then(res => {
+        if (res) {
+          sortData(res);
+        }
+      })
+    } else {
+      sortData(data)
+    }
   }, [bySort]);
 
   return (
