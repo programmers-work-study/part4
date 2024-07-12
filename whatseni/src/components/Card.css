@@ -85,3 +85,8 @@
 .bookmark.selected > i {
   color: red;
 }
+
+.card--box {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
