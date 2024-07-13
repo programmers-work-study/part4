@@ -1,8 +1,8 @@
 /* 여기에 주어진 요구 사항을 충족 시키기 위한 코드를 작성 및 수정해 주세요. */
 import { useState } from "react";
 import "./App.css";
-import Card from "./components/Card";
 import { OrderType } from "./models";
+import { CardSection } from "./components/CardSection";
 
 function App() {
   const [orderType, setOrderType] = useState<OrderType>("1");
@@ -19,7 +19,7 @@ function App() {
         </select>
       </div>
       <div className="section">
-        <Card orderType={orderType} />
+        <CardSection orderType={orderType} />
       </div>
     </div>
   );

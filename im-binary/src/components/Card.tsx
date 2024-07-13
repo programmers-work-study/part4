@@ -1,78 +1,44 @@
 /* 여기에 주어진 요구 사항을 충족 시키기 위한 코드를 작성 및 수정해 주세요. */
+import { Post } from "../models";
 import "./Card.css";
-import posts from "../data/posts.json";
-import { OrderType } from "../models";
-import { useEffect, useState } from "react";
 
-function Card({ orderType }: { orderType: OrderType }) {
-  const [sortedPosts, setSortedPosts] = useState([...posts]);
-  const [bookmarkedPosts, setBookmarkedPosts] = useState([]);
-
-  useEffect(() => {
-    const sorted = [...posts].sort((a, b) => {
-      const aIsBookmarked = bookmarkedPosts.includes(a);
-      const bIsBookmarked = bookmarkedPosts.includes(b);
-
-      if (aIsBookmarked && !bIsBookmarked) return -1;
-      if (bIsBookmarked && !aIsBookmarked) return 1;
-
-      if (orderType === "1") {
-        return (
-          new Date(b.upload_date).getTime() - new Date(a.upload_date).getTime()
-        );
-      } else {
-        return b.views - a.views;
-      }
-    });
-
-    setSortedPosts(sorted);
-  }, [orderType, bookmarkedPosts]);
+function Card({
+  post,
+  isBookmarked,
+  onBookmarkToggle,
+}: {
+  post: Post;
+  isBookmarked: boolean;
+  onBookmarkToggle: () => void;
+}) {
+  const { title, upload_date, views } = post;
 
   return (
-    <ol>
-      {sortedPosts.map((post) => {
-        const isBookmarked = bookmarkedPosts.includes(post);
-
-        return (
-          <li className="card--container" id="card1" key={post.title}>
-            <div className="header">
-              <div className="card--tag">
-                <span className="upload-date">{post.upload_date}</span>
-              </div>
-              <div
-                className="card--tag"
-                onClick={() => {
-                  if (isBookmarked) {
-                    setBookmarkedPosts(
-                      bookmarkedPosts.filter((item) => item !== post)
-                    );
-                  } else {
-                    setBookmarkedPosts([...bookmarkedPosts, post]);
-                  }
-                }}
-              >
-                <span
-                  className={`icon bookmark ${
-                    isBookmarked ? "bookmarked" : ""
-                  }`}
-                >
-                  <i className="fa fa-bookmark"></i>
-                </span>
-              </div>
-            </div>
-            <div className="card--content">
-              <span className="title">{post.title}</span>
-            </div>
-            <div className="footer">
-              <div className="card--tag">
-                <span className="views">{post.views}</span>
-                views
-              </div>
-            </div>
-          </li>
-        );
-      })}
-    </ol>
+    <li className="card--container" id="card1">
+      <div className="header">
+        <div className="card--tag">
+          <span className="upload-date">{upload_date}</span>
+        </div>
+        <div className="card--tag">
+          <span
+            onClick={onBookmarkToggle}
+            className={`icon bookmark ${isBookmarked ? "bookmarked" : ""}`}
+          >
+            <i className="fa fa-bookmark"></i>
+          </span>
+        </div>
+      </div>
+      <div className="card--content">
+        <span className="title">{title}</span>
+      </div>
+      <div className="footer">
+        <div className="card--tag">
+          <span className="views">{views}</span>
+          views
+        </div>
+      </div>
+    </li>
   );
 }
+
 export default Card;
