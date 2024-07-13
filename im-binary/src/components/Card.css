@@ -81,3 +81,7 @@
   background: transparent;
   color: #fff;
 }
+
+.bookmark.bookmarked > i {
+  color: red;
+}

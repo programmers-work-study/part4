@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 
 function Card({ orderType }: { orderType: OrderType }) {
   const [sortedPosts, setSortedPosts] = useState([...posts]);
+  const [bookmarkedPosts, setBookmarkedPosts] = useState([]);
 
   useEffect(() => {
     const sorted = [...posts].sort((a, b) => {
@@ -23,29 +24,48 @@ function Card({ orderType }: { orderType: OrderType }) {
 
   return (
     <ol>
-      {sortedPosts.map((post) => (
-        <li className="card--container" id="card1" key={post.title}>
-          <div className="header">
-            <div className="card--tag">
-              <span className="upload-date">{post.upload_date}</span>
+      {sortedPosts.map((post) => {
+        const isBookmarked = bookmarkedPosts.includes(post);
+
+        return (
+          <li className="card--container" id="card1" key={post.title}>
+            <div className="header">
+              <div className="card--tag">
+                <span className="upload-date">{post.upload_date}</span>
+              </div>
+              <div
+                className="card--tag"
+                onClick={() => {
+                  if (isBookmarked) {
+                    setBookmarkedPosts(
+                      bookmarkedPosts.filter((item) => item !== post)
+                    );
+                  } else {
+                    setBookmarkedPosts([...bookmarkedPosts, post]);
+                  }
+                }}
+              >
+                <span
+                  className={`icon bookmark ${
+                    isBookmarked ? "bookmarked" : ""
+                  }`}
+                >
+                  <i className="fa fa-bookmark"></i>
+                </span>
+              </div>
             </div>
-            <div className="card--tag">
-              <span className="icon bookmark">
-                <i className="fa fa-bookmark"></i>
-              </span>
+            <div className="card--content">
+              <span className="title">{post.title}</span>
             </div>
-          </div>
-          <div className="card--content">
-            <span className="title">{post.title}</span>
-          </div>
-          <div className="footer">
-            <div className="card--tag">
-              <span className="views">{post.views}</span>
-              views
+            <div className="footer">
+              <div className="card--tag">
+                <span className="views">{post.views}</span>
+                views
+              </div>
             </div>
-          </div>
-        </li>
-      ))}
+          </li>
+        );
+      })}
     </ol>
   );
 }
