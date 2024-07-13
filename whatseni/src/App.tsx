@@ -12,68 +12,47 @@ export interface IData {
   bookmark: boolean;
 }
 function App() {
-  const [data, setData] = useState<IData[] | null>(null);
+  const [data, setData] = useState<IData[]>([]);
   const [bySort, setBySort] = useState<SortType>('recent');
-  const [isMount, setIsMount] = useState<boolean>(false); // 데이터 한번만 가져오도록 설정하기 위한 플래그
 
   const handleChangeType = (event: React.ChangeEvent<HTMLSelectElement>) => {
     if (event.target.value === '1') {
       setBySort('recent');
     } else if (event.target.value === '2') {
-      setBySort('view')
+      setBySort('view');
     }
   }
 
-  const fetchData = async () => {
-    try {
-      return jsonData;
-      // const response = await fetch("./data/posts.json");
-      // const jsonData = await response.json();
-      // return jsonData;
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  const sortData = () => {
+    let sortedData = [...data];
+    // 먼저 북마크 기준으로 정렬
+    sortedData.sort((a, b) => (b.bookmark ? -1 : 1));
 
-  const sortData = (list: IData[] | null) => {
-    if (!list) return;
+    // 북마크된 항목들만 정렬
+    let bookmarked = sortedData.filter(post => post.bookmark);
+    let notBookmarked = sortedData.filter(post => !post.bookmark);
 
-    let sortedData: IData[];
     if (bySort === 'recent') {
-      sortedData = list.sort((a: IData, b: IData) => new Date(b.upload_date).getTime() - new Date(a.upload_date).getTime());
+      bookmarked.sort((a, b) => new Date(b.upload_date).getTime() - new Date(a.upload_date).getTime());
+      notBookmarked.sort((a, b) => new Date(b.upload_date).getTime() - new Date(a.upload_date).getTime());
     } else if (bySort === 'view') {
-      sortedData = list.sort((a: IData, b: IData) => b.views - a.views);
+      bookmarked.sort((a, b) => b.views - a.views);
+      notBookmarked.sort((a, b) => b.views - a.views);
     }
 
-    sortedData = sortedData.sort((a: IData, b: IData) => (b.bookmark ? 1 : 0) - (a.bookmark ? 1 : 0));
-    setData(sortedData)
-  }
-
-  const toggleBookmark = (title: string) => {
-    const updatedData = data?.map(item =>
-      item.title === title ? { ...item, bookmark: !item.bookmark } : item
-    ) || [];
-    setData(updatedData);
-    sortData(updatedData);
+    return [...bookmarked, ...notBookmarked];
   };
 
+  const toggleBookmark = (title: string) => {
+    setData(prevData =>
+      prevData.map(post =>
+        post.title === title ? { ...post, bookmark: !post.bookmark } : post
+      )
+    );
+  };
   useEffect(() => {
-    setIsMount(true);
-
-    return () => setIsMount(false);
-  }, [])
-
-  useEffect(() => {
-    if (!isMount) {
-      fetchData().then(res => {
-        if (res) {
-          sortData(res);
-        }
-      })
-    } else {
-      sortData(data)
-    }
-  }, [bySort]);
+    setData(jsonData);
+  }, []);
 
   return (
     <div className="container">
@@ -84,7 +63,11 @@ function App() {
         </select>
       </div>
       <div className="section">
-        {data ? <Card posts={data} onBookmarkToggle={toggleBookmark} /> : null}
+        <ol>
+          {sortData().map((d) => (
+            <Card key={d.title} post={d} onBookmarkToggle={toggleBookmark} />
+          ))}
+        </ol>
       </div>
     </div>
   );
