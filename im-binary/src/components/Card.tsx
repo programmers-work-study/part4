@@ -10,6 +10,12 @@ function Card({ orderType }: { orderType: OrderType }) {
 
   useEffect(() => {
     const sorted = [...posts].sort((a, b) => {
+      const aIsBookmarked = bookmarkedPosts.includes(a);
+      const bIsBookmarked = bookmarkedPosts.includes(b);
+
+      if (aIsBookmarked && !bIsBookmarked) return -1;
+      if (bIsBookmarked && !aIsBookmarked) return 1;
+
       if (orderType === "1") {
         return (
           new Date(b.upload_date).getTime() - new Date(a.upload_date).getTime()
@@ -20,7 +26,7 @@ function Card({ orderType }: { orderType: OrderType }) {
     });
 
     setSortedPosts(sorted);
-  }, [orderType]);
+  }, [orderType, bookmarkedPosts]);
 
   return (
     <ol>
