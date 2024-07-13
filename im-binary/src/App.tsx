@@ -1,6 +1,6 @@
 /* 여기에 주어진 요구 사항을 충족 시키기 위한 코드를 작성 및 수정해 주세요. */
 import "./App.css";
-import Table from "./components/Table";
+import Card from "./components/Card";
 
 function App() {
   return (
@@ -12,7 +12,7 @@ function App() {
         </select>
       </div>
       <div className="section">
-        <Table />
+        <Card />
       </div>
     </div>
   );
