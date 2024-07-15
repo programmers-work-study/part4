@@ -9,6 +9,7 @@ interface CardProps {
 }
 
 function Card({ post, onBookmarkToggle }: CardProps) {
+  // 북마크 클릭 핸들러
   const handleBookmarkClick = () => {
     onBookmarkToggle(post.title);
   };
