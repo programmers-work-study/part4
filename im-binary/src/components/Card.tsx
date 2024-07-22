@@ -1,0 +1,44 @@
+/* 여기에 주어진 요구 사항을 충족 시키기 위한 코드를 작성 및 수정해 주세요. */
+import { Post } from "../models";
+import "./Card.css";
+
+function Card({
+  post,
+  isBookmarked,
+  onBookmarkToggle,
+}: {
+  post: Post;
+  isBookmarked: boolean;
+  onBookmarkToggle: () => void;
+}) {
+  const { title, upload_date, views } = post;
+
+  return (
+    <li className="card--container" id="card1">
+      <div className="header">
+        <div className="card--tag">
+          <span className="upload-date">{upload_date}</span>
+        </div>
+        <div className="card--tag">
+          <span
+            onClick={onBookmarkToggle}
+            className={`icon bookmark ${isBookmarked ? "bookmarked" : ""}`}
+          >
+            <i className="fa fa-bookmark"></i>
+          </span>
+        </div>
+      </div>
+      <div className="card--content">
+        <span className="title">{title}</span>
+      </div>
+      <div className="footer">
+        <div className="card--tag">
+          <span className="views">{views}</span>
+          views
+        </div>
+      </div>
+    </li>
+  );
+}
+
+export default Card;
