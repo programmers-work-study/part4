@@ -1,4 +1,4 @@
-export type SortType = "recent" | "view";
+export type SortType = "recent" | "view" | "bookmark";
 
 export interface Post {
   title: string;
